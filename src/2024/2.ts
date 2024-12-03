@@ -11,54 +11,36 @@ const testInput = `
 
 const parse = (input: string) => input.split("\n").map((i) => i.split(" ").map(Number));
 
-function simulate(reports: number[][], useProblemDampener: boolean) {
-	let safeCount = 0;
+function isReportSafe(report: number[]) {
+	let isIncreasing = true;
+	let isDecreasing = true;
 
-	for (const report of reports) {
-		let isSafe = true;
-		let isDampenerUsed = false;
-		let targetDirection;
+	for (let idx = 1; idx < report.length; idx++) {
+		const distance = report[idx] - report[idx - 1];
+		if (distance < 0) isIncreasing = false;
+		if (distance > 0) isDecreasing = false;
 
-		for (let idx = 0; idx < report.length - 1; idx++) {
-			const currLevel = report[idx];
-			const nextLevel = report[idx + 1];
-
-			const distance = nextLevel - currLevel;
-			const absDistance = Math.abs(distance);
-			const direction = distance > 0; // True if increasing, false if decreasing or same
-			if (idx === 0) targetDirection = direction; // Every following index should match this
-
-			if (
-				(absDistance < 1 || absDistance > 3)
-				|| (direction !== targetDirection)
-			) {
-				if (useProblemDampener && !isDampenerUsed) {
-					isDampenerUsed = true;
-					report.splice(idx, 1);
-					idx = -1;
-					continue;
-				} else {
-					isSafe = false;
-					break;
-				}
-			}
-		}
-
-		if (isSafe) safeCount++;
+		if (
+			(Math.abs(distance) > 3 || distance === 0)
+			|| !(isIncreasing || isDecreasing)
+		) return false;
 	}
 
-	return safeCount;
+	return true;
 }
 
 export const part1: Part = (input) => {
 	const reports = parse(input);
-	return simulate(reports, false);
+	return reports.filter(isReportSafe).length;
 };
 
-// TODO: There is an issue with the logic for p2 that I have not yet worked out
-// Namely, the result is too low. I think it may be to do with duplicate adjacent numbers.
-// Of course, it works on the example data...
 export const part2: Part = (input) => {
 	const reports = parse(input);
-	return simulate(reports, true);
+	return reports.filter((report) => {
+		if (isReportSafe(report)) return true;
+
+		for (let idx = 0; idx < report.length; idx++) {
+			if (isReportSafe(report.toSpliced(idx, 1))) return true;
+		}
+	}).length;
 };
