@@ -4,5 +4,8 @@
 	},
 	"imports": {
 		"#shared/": "./src/shared/"
+	},
+	"lint": {
+		"rules": { "exclude": ["no-unused-vars"] }
 	}
 }
