@@ -1,3 +1,5 @@
 {
-    "deno.enable": true
+	"editor.defaultFormatter": "dprint.dprint",
+	"editor.formatOnSave": true,
+	"deno.enable": true
 }
