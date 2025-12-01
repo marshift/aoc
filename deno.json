@@ -3,7 +3,8 @@
 		"run": "deno run -A ./src/shared/runner.ts"
 	},
 	"imports": {
-		"#shared/": "./src/shared/"
+		"#shared/": "./src/shared/",
+		"@std/dotenv": "jsr:@std/dotenv@^0.225.5"
 	},
 	"lint": {
 		"rules": { "exclude": ["no-unused-vars"] }
