@@ -17,13 +17,7 @@ export const part1: Part = (input) => {
 	const ids = parse(input);
 
 	let total = 0;
-	for (const id of ids) {
-		const midpoint = id.length / 2;
-		const start = id.slice(0, midpoint);
-		const end = id.slice(midpoint);
-
-		if (start === end) total += Number(id);
-	}
+	for (const id of ids) if (id.match(/^(\d+)\1$/)) total += Number(id);
 
 	return total;
 };
