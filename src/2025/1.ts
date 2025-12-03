@@ -15,53 +15,35 @@ L82
 
 const parse = (input: string) =>
 	input.split("\n").map((line) => {
-		const chars = line.split("");
-		return {
-			direction: chars.shift(),
-			distance: Number(chars.join("")),
-		} as Rotation;
+		const direction = line[0] as "L" | "R";
+		const amount = Number(line.slice(1));
+		return direction === "L" ? -amount : amount;
 	});
 
-interface Rotation {
-	direction: "L" | "R";
-	distance: number;
-}
-
-class Dial {
-	#position = 50;
-	get position() {
-		return this.#position;
-	}
-
-	rotate(rot: Rotation) {
-		if (rot.direction === "L") this.#position -= rot.distance;
-		else this.#position += rot.distance;
-		return this.#position;
-	}
-}
+const DIAL_START = 50;
 
 export const part1: Part = (input) => {
 	const rotations = parse(input);
-	const dial = new Dial();
+	let dial = DIAL_START;
 
 	let hits = 0;
-	for (const rot of rotations) if (dial.rotate(rot) % 100 === 0) hits++;
+	for (const rot of rotations) if ((dial += rot) % 100 === 0) hits++;
 
 	return hits;
 };
 
 export const part2: Part = (input) => {
 	const rotations = parse(input);
-	const dial = new Dial();
+	let dial = DIAL_START;
 
 	let hits = 0;
 	for (const rot of rotations) {
 		let start, end;
 
-		const oldPos = dial.position;
-		const newPos = dial.rotate(rot);
+		const oldPos = dial;
+		const newPos = dial += rot;
 
-		if (rot.direction === "L") {
+		if (rot < 0) {
 			start = Math.ceil(newPos / 100);
 			end = Math.floor((oldPos - 1) / 100);
 		} else {
@@ -69,7 +51,6 @@ export const part2: Part = (input) => {
 			end = Math.floor(newPos / 100);
 		}
 
-		// I sure do love special cases not included in the example.
 		if (start <= end) hits += 1 + end - start;
 	}
 
