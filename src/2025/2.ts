@@ -29,4 +29,10 @@ export const part1: Part = (input) => {
 };
 
 export const part2: Part = (input) => {
+	const ids = parse(input);
+
+	let total = 0;
+	for (const id of ids) if (id.match(/^(\d+)\1+$/)) total += Number(id);
+
+	return total;
 };
