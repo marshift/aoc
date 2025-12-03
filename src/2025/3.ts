@@ -24,4 +24,21 @@ export const part1: Part = (input) => {
 };
 
 export const part2: Part = (input) => {
+	const banks = parse(input);
+
+	let joltage = 0;
+	for (const bank of banks) {
+		let final = 0;
+		let lastIdx = 0;
+
+		for (let n = 1; n <= 12; n++) {
+			const value = Math.max(...bank.slice(lastIdx, n === 12 ? undefined : n - 12));
+			lastIdx = bank.indexOf(value, lastIdx) + 1;
+			final = (final * 10) + value;
+		}
+
+		joltage += final;
+	}
+
+	return joltage;
 };
