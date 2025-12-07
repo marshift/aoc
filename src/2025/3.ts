@@ -11,6 +11,7 @@ const parse = (input: string) => input.split("\n").map((line) => Array.from(line
 
 function getJoltage(banks: number[][], batteries: number) {
 	let joltage = 0;
+
 	for (const bank of banks) {
 		let final = 0;
 		let lastIdx = 0;
